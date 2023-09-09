@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cifrado y Descifrado</title>
+    <style>
+        input {
+            margin: 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cifrado y Descifrado</h1>
+    <p>Introduce un texto o número:</p>
+    <input type="text" id="inputText">
+    <button onclick="cifrarTexto()">Cifrar</button>
+    <button onclick="descifrarTexto()">Descifrar</button>
+    <p>Resultado:</p>
+    <input type="text" id="outputText" readonly>
+    <button onclick="copiarResultado()">Copiar</button>
+    <button onclick="limpiarEntrada()">Limpiar Entrada</button>
+
+    <script>
+        function cifrarTexto() {
+            const inputText = document.getElementById("inputText").value;
+            let result = "";
+
+            for (let i = 0; i < inputText.length; i++) {
+                const char = inputText[i];
+                if (/[a-zA-Z]/.test(char)) {
+                    const isUpperCase = char === char.toUpperCase();
+                    const offset = isUpperCase ? 65 : 97;
+                    const shiftedChar = String.fromCharCode(((char.charCodeAt(0) - offset + 18) % 26) + offset);
+                    result += isUpperCase ? shiftedChar : shiftedChar.toLowerCase();
+                } else if (/[0-9]/.test(char)) {
+                    const shiftedDigit = (parseInt(char) + 7) % 10;
+                    result += shiftedDigit.toString();
+                } else {
+                    result += char;
+                }
+            }
+
+            document.getElementById("outputText").value = result;
+        }
+
+        function descifrarTexto() {
+            const inputText = document.getElementById("inputText").value;
+            let result = "";
+
+            for (let i = 0; i < inputText.length; i++) {
+                const char = inputText[i];
+                if (/[a-zA-Z]/.test(char)) {
+                    const isUpperCase = char === char.toUpperCase();
+                    const offset = isUpperCase ? 65 : 97;
+                    const shiftedChar = String.fromCharCode(((char.charCodeAt(0) - offset - 18 + 26) % 26) + offset);
+                    result += isUpperCase ? shiftedChar : shiftedChar.toLowerCase();
+                } else if (/[0-9]/.test(char)) {
+                    const shiftedDigit = (parseInt(char) - 7 + 10) % 10;
+                    result += shiftedDigit.toString();
+                } else {
+                    result += char;
+                }
+            }
+
+            document.getElementById("outputText").value = result;
+        }
+
+        function copiarResultado() {
+            const outputText = document.getElementById("outputText");
+            outputText.select();
+            document.execCommand("copy");
+        }
+
+        function limpiarEntrada() {
+            document.getElementById("inputText").value = "";
+        }
+    </script>
+</body>
+</html>
